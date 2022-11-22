@@ -11,6 +11,14 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class Util {
+    static String[] weekDays = {
+            "MONDAY",
+            "TUESDAY",
+            "WEDNESDAY",
+            "THURSDAY",
+            "FRIDAY",
+            "SATURDAY",
+            "SUNDAY",};
 
     static final String BABIES_CSV = "src/test/resources/babies.csv";
 
@@ -27,7 +35,7 @@ public class Util {
         return Math.round(d * precision) / (double) precision;
     }
 
-    static BirthJournalManagement init(BirthJournalManagementImpl journal, int seed, int size, WeekDay[] days, String[] genders) {
+    static BirthJournalManagementImpl init(BirthJournalManagementImpl journal, int seed, int size, WeekDay[] days, String[] genders) {
         if (seed == 0) {
             getBabiesFromCsv().forEach(e -> journal.addEntryOfBaby(e.getKey(), e.getValue()));
         }
@@ -58,13 +66,13 @@ public class Util {
                     .map(a -> {
                         String[] sp = a[1].split(",");
                         return (Map.Entry<WeekDay, Baby>) new AbstractMap.SimpleEntry<>(
-                                WeekDay.fromValue(Integer.parseInt(a[0])),
-                                    sp.length < 5 ? null :
+                                WeekDay.valueOf(weekDays[Integer.parseInt(a[0])]),
+                                sp.length < 5 ? null :
                                         new Baby(sp[0].trim(),
-                                            Double.parseDouble(sp[1]),
-                                            Integer.parseInt(sp[2]),
-                                            sp[3].trim(),
-                                            sp[4].trim()));
+                                                Double.parseDouble(sp[1]),
+                                                Integer.parseInt(sp[2]),
+                                                sp[3].trim(),
+                                                sp[4].trim()));
                     }).toList();
         } catch (IOException e) {
             fail("The data file was not found: " + BABIES_CSV);

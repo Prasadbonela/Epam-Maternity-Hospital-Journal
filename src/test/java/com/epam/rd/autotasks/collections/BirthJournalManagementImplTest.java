@@ -17,6 +17,7 @@ class BirthJournalManagementImplTest {
     Baby baby1;
     Baby baby2;
     List<Baby> goodBabies;
+//    WeekDay[] weekDays = new WeekDay[] {new WeekDay(), new WeekDay(), new WeekDay(), new WeekDay(), new WeekDay(), new WeekDay(), new WeekDay(), };
 
     @BeforeEach
     void setUp() {
@@ -29,7 +30,7 @@ class BirthJournalManagementImplTest {
     void testAmountBabies() {
         BirthJournalManagement journal =
                 init(new BirthJournalManagementImpl(), 5,
-                        24, WeekDay.values, GENDERS);
+                        24, WeekDay.values(), GENDERS);
         assertEquals(24, journal.amountBabies(),
                 "");
         assertEquals(0, new BirthJournalManagementImpl().amountBabies(),
@@ -43,20 +44,20 @@ class BirthJournalManagementImplTest {
         BirthJournalManagementImpl journal = new BirthJournalManagementImpl();
 
         IntStream.range(0, 24).forEach(b ->
-                assertTrue(journal.addEntryOfBaby(WeekDay.FRIDAY, it.next()),
+                assertTrue(journal.addEntryOfBaby(WeekDay.valueOf("FRIDAY"), it.next()),
                         ""));
 
         journal.commit();
-        assertFalse(journal.addEntryOfBaby(WeekDay.FRIDAY, emptyBaby),
+        assertFalse(journal.addEntryOfBaby(WeekDay.valueOf("FRIDAY"), emptyBaby),
                 "");
     }
 
     @ParameterizedTest
     @CsvFileSource(files = "src/test/resources/babies-weight.csv", delimiter = ';')
     void testFindBabyWithHighestWeight(int r, String gender, String babyString) {
-        BirthJournalManagement journal =
+        BirthJournalManagementImpl journal =
                 init(new BirthJournalManagementImpl(), r,
-                        24, WeekDay.values, GENDERS);
+                        24, WeekDay.values(), GENDERS);
 
         List<Baby> actual = journal.findBabyWithHighestWeight(gender);
         List<Baby> expected = getBabiesFromString(babyString);
@@ -67,9 +68,9 @@ class BirthJournalManagementImplTest {
     @ParameterizedTest
     @CsvFileSource(files = {"src/test/resources/babies-height.csv"}, delimiter = ';')
     void testFindBabyWithSmallestHeight(int r, String gender, String babyString) {
-        BirthJournalManagement journal =
+        BirthJournalManagementImpl journal =
                 init(new BirthJournalManagementImpl(), r,
-                        24, WeekDay.values, GENDERS);
+                        24, WeekDay.values(), GENDERS);
 
         List<Baby> actual = journal.findBabyWithSmallestHeight(gender);
         List<Baby> expected = getBabiesFromString(babyString);
@@ -99,7 +100,7 @@ class BirthJournalManagementImplTest {
     @CsvFileSource(files = "src/test/resources/babies-times.csv", delimiter = ';')
     void testFindBabiesByBirthTime(int r, String from, String to, String babyString) {
         BirthJournalManagement journal = init(new BirthJournalManagementImpl(), r,
-                24, WeekDay.values, GENDERS);
+                24, WeekDay.values(), GENDERS);
 
         Set<Baby> actual = journal.findBabiesByBirthTime(from, to);
         List<Baby> expected = getBabiesFromString(babyString);
@@ -112,7 +113,7 @@ class BirthJournalManagementImplTest {
     void testFindBabiesByBirthTime2(int r, String from, String to, String babyString) {
         BirthJournalManagementImpl journal =
                 (BirthJournalManagementImpl) init(new BirthJournalManagementImpl(), r,
-                        24, WeekDay.values, GENDERS);
+                        24, WeekDay.values(), GENDERS);
 
         Set<Baby> actual = journal.findBabiesByBirthTime(from, to);
         List<Baby> expected = getBabiesFromString(babyString);
