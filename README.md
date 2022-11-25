@@ -2,12 +2,12 @@
 
 The purpose of this exercise is to apply various algorithms to collections using the methods of the `Collections` class.
 
-Duration: **45 minutes**
+Duration: **1 hour**
 
 
 ## Description
 
-In this task, you will simulate the work of a weekly maternity hospital journal. The internal structure of the journal is a collection of the `Map` type, where the key is the weekday (for example, an enum of the `WeekDay` type) and the value is a list of babies born during the week (for example, objects of the `Baby` type).  
+In this task, you will simulate the work of a weekly maternity hospital journal. The internal structure of the journal is a collection of the `Map` type, where the key is the weekday (an enum of the `WeekDay` type) and the value is a list of babies born during the week (objects of the `Baby` type).  
 The `Baby` class describes a baby with the following characteristics: `name`, `weight`, `height`, `gender`, and `birth time`. All characteristics are passed to the constructor to create an object. **You must not change this class.**  
 Please note that once a birth journal has been created and filled in, it cannot be changed. This needs to be guaranteed.  
 Now, please proceed to the `BirthJournalManagementImpl` class, which implements the `BirthJournalManagement` interface, and provide implementations of the following methods:
