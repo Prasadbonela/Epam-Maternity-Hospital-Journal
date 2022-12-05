@@ -104,7 +104,7 @@ class BirthJournalManagementImplTest {
 
         Set<Baby> actual = journal.findBabiesByBirthTime(from, to);
         List<Baby> expected = getBabiesFromString(babyString);
-        assertIterableEquals(expected, actual,
+        assertIterableEqualsIgnoreOrdering(expected, actual,
                 "\nExpected: " + expected + "\n but was: " + actual);
     }
 

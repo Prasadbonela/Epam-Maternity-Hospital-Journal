@@ -1,8 +1,8 @@
 package com.epam.rd.autotasks.collections;
 
+import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
-import com.tngtech.archunit.junit.AnalyzeClasses;
-import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,11 +25,6 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@AnalyzeClasses(packages = "com.epam.rd.autotasks", importOptions = {
-        ImportOption.DoNotIncludeTests.class,
-        ImportOption.DoNotIncludeArchives.class,
-        ImportOption.DoNotIncludeJars.class
-})
 class BirthJournalManagementImplComplianceTest {
 
     static CtModel ctModel;
@@ -42,7 +37,6 @@ class BirthJournalManagementImplComplianceTest {
         ctModel = spoon.buildModel();
     }
 
-    @ArchTest
     ArchRule ruleStreams = noClasses()
             .should()
             .callMethodWhere(target(describe("Methods Collection#stream() should not be used",
@@ -51,13 +45,10 @@ class BirthJournalManagementImplComplianceTest {
                             target.getParameterTypes().isEmpty()
             )));
 
-    @ArchTest
     ArchRule ruleCollection = noClasses().should().implement(Collection.class);
 
-    @ArchTest
     ArchRule ruleMap = noClasses().should().implement(Map.class);
 
-    @Test
     void testComplianceLambda() {
         List<CtLambda<?>> list = ctModel.filterChildren((Filter<CtLambda<?>>) el -> true).list();
         assertTrue(list.isEmpty(),
@@ -65,7 +56,6 @@ class BirthJournalManagementImplComplianceTest {
                         list);
     }
 
-    @Test
     void testNoMorePublicMethods() {
         List<CtMethod<?>> methods = ctModel.filterChildren((Filter<CtType<?>>) el ->
                         el.getQualifiedName().equals(BirthJournalManagementImpl.class.getName()))
@@ -93,5 +83,21 @@ class BirthJournalManagementImplComplianceTest {
                 .toList();
         assertEquals(0, actual.size(),
                 "You can add only private methods but found: " + actual);
+    }
+
+    @Test
+    void testCompliance() {
+        JavaClasses classes = new ClassFileImporter()
+                .withImportOption(new ImportOption.DoNotIncludeJars())
+                .withImportOption(new ImportOption.DoNotIncludeTests())
+                .withImportOption(new ImportOption.DoNotIncludeArchives())
+                .withImportOption(new ImportOption.DoNotIncludeJars())
+                .importPackages("com.epam.rd.autotasks");
+
+        ruleCollection.check(classes);
+        ruleMap.check(classes);
+        ruleStreams.check(classes);
+        testComplianceLambda();
+        testNoMorePublicMethods();
     }
 }

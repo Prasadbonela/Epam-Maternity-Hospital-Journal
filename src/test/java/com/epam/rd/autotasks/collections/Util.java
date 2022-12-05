@@ -1,8 +1,6 @@
 package com.epam.rd.autotasks.collections;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -67,12 +65,12 @@ public class Util {
                         String[] sp = a[1].split(",");
                         return (Map.Entry<WeekDay, Baby>) new AbstractMap.SimpleEntry<>(
                                 WeekDay.valueOf(weekDays[Integer.parseInt(a[0])]),
-                                sp.length < 5 ? null :
+                                    sp.length < 5 ? null :
                                         new Baby(sp[0].trim(),
-                                                Double.parseDouble(sp[1]),
-                                                Integer.parseInt(sp[2]),
-                                                sp[3].trim(),
-                                                sp[4].trim()));
+                                            Double.parseDouble(sp[1]),
+                                            Integer.parseInt(sp[2]),
+                                            sp[3].trim(),
+                                            sp[4].trim()));
                     }).toList();
         } catch (IOException e) {
             fail("The data file was not found: " + BABIES_CSV);
